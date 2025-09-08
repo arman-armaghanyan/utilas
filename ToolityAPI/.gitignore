@@ -82,6 +82,6 @@ ehthumbs.db
 Thumbs.db
 
 # macOS
-.DS_Store
 .AppleDouble
 .LSOverride
+.DS_Store
