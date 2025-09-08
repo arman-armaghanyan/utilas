@@ -13,6 +13,8 @@
 bin/
 obj/
 out/
+ToolityAPI/ToolityAPI/uploads/
+
 
 ## NuGet Packages
 *.nupkg
