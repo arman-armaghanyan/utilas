@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolityAPI", "ToolityAPI\ToolityAPI.csproj", "{54788F7D-E95A-4689-953D-B9A850E4A3DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilasAPI", "UtilasAPI\UtilasAPI.csproj", "{54788F7D-E95A-4689-953D-B9A850E4A3DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
