@@ -33,6 +33,10 @@ public class PNGtoAnyControler : Controller
     {
         IFormFileCollection files = Request.Form.Files;
         var currentUploadPath = !String.IsNullOrEmpty(uploadId.ResultId)? this.GetHashCode().ToString() : uploadId.ResultId;
+        if (!Directory.Exists(UPLOAD_Fils_PATH))
+        {
+            Directory.CreateDirectory(UPLOAD_Fils_PATH);
+        }
         var uploadPath = Directory.CreateDirectory( Path.Combine(UPLOAD_Fils_PATH , currentUploadPath));
  
         foreach (var file in files)

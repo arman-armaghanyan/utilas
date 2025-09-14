@@ -30,7 +30,7 @@ public class PngtoJpgConverterStrategy : IImageConverterStrategy
     {
         var token = new TaskCompletionSource<string>();
         var jpgPath = Path.ChangeExtension(pngPath, "jpg");                          
-        Task.Run(() =>
+        Task.Run(() =>  
         {
             using (FileStream image = File.Open(pngPath, FileMode.Open, FileAccess.Read, FileShare.None))
             {

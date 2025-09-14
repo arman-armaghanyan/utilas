@@ -69,7 +69,7 @@ const MultiFileUploader = () => {
       console.log('Total files to upload:', selectedFiles.length);
 
       // Send POST request with multipart/form-data to your specific endpoint
-      const response = await fetch('http://localhost:5033/png_to_any_upload', {
+      const response = await fetch('https://localhost:7178/png_to_any_upload', {
         method: 'POST',
         headers: {
           'accept': '*/*',
@@ -81,7 +81,7 @@ const MultiFileUploader = () => {
         const responseData = await response.json();
         console.log('Upload successful:', responseData["resultId"]);
 
-        const response1 = await fetch('http://localhost:5033/png_to_any_download?ResultId=' + responseData["resultId"] , {
+        const response1 = await fetch('https://localhost:7178/png_to_any_download?ResultId=' + responseData["resultId"] , {
           method: 'GET'});
 
         //image download implementation
@@ -138,7 +138,7 @@ const MultiFileUploader = () => {
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <h2>Multi-File Uploader</h2>
+      <h2>Uploader File</h2>
       
       <div style={{ marginBottom: '20px' }}>
         <input
@@ -233,7 +233,7 @@ const MultiFileUploader = () => {
           width: '100%'
         }}
       >
-        {uploading ? 'Uploading...' : `Upload ${selectedFiles.length} File(s)`}
+        {uploading ? 'Converting...' : `Convert ${selectedFiles.length} File(s)`}
       </button>
 
       {uploadStatus && (
