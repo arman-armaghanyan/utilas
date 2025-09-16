@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using ImageMagick;
 
 namespace ToolityAPI.Services.Converters;
@@ -9,21 +10,21 @@ public enum ConverterType
 
 public interface IImageConverter
 {
-    public Task<string> ConvertImage(IList<string> files , ConverterType converterType);
+    public Task<string> ConvertImage( string id ,IList<string> files , ConverterType converterType);
 }
 
 public interface IImageConverterStrategy
 {
-    public Task<string> Convert (IList<string> files );
+    public Task<IList<string>> Convert (IList<string> files );
 }
 
 public class PngtoJpgConverterStrategy : IImageConverterStrategy
 {
-    public async Task<string> Convert(IList<string> files)
+    public async Task<IList<string>> Convert(IList<string> files)
     {
         var tasks = files.Select(file =>  Convert(file));
         var convertedFiles = await Task.WhenAll(tasks);
-        return convertedFiles.FirstOrDefault() ?? string.Empty;
+        return convertedFiles.ToList();
     }
     
     private static Task<string> Convert(string pngPath )
@@ -35,7 +36,7 @@ public class PngtoJpgConverterStrategy : IImageConverterStrategy
             using (FileStream image = File.Open(pngPath, FileMode.Open, FileAccess.Read, FileShare.None))
             {
                 using var magicImage = new MagickImage(image);
-                magicImage.Format = MagickFormat.WebP;
+                magicImage.Format = MagickFormat.Jpeg;
                 var data = magicImage.ToByteArray();
                 using (FileStream fs = File.Create(jpgPath))
                 {
@@ -80,14 +81,25 @@ public class ImageConverterStrategyFactory : IDisposable
 
 public class ImageConverterService : IImageConverter
 {
+    private  string UPLOAD_Fils_PATH = $"{Directory.GetCurrentDirectory()}/uploads";
+
     private readonly ImageConverterStrategyFactory _factory;
 
     public ImageConverterService(ImageConverterStrategyFactory factory)
     {
         _factory = factory;
     }
-    public Task<string> ConvertImage(IList<string> files, ConverterType converterType)
+    public async Task<string> ConvertImage(string id ,IList<string> files, ConverterType converterType)
     {
-        return _factory.GetStragetype(converterType).Convert(files);
+        var convertedFiles = await _factory.GetStragetype(converterType).Convert(files);
+        var zipPath = Path.Combine(UPLOAD_Fils_PATH , $"{id}.zip");
+
+        using (ZipArchive archive = ZipFile.Open(zipPath, ZipArchiveMode.Update))
+        {
+            foreach (var file in convertedFiles)
+                archive.CreateEntryFromFile(file, file.Split("/").Last());
+        }
+
+        return zipPath;
     }
 }

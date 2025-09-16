@@ -87,10 +87,10 @@ const MultiFileUploader = () => {
         //image download implementation
         const blob = await response1.blob(); // Convert to Blob (binary)
         const url = window.URL.createObjectURL(blob); // Create temporary URL
-        console.log('Upload successful:', url);
+        console.log('URL successful:', url);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "myfile.jpeg"; // 🔁 Set filename
+        a.download = responseData["resultId"] + ".zip"; // 🔁 Set filename
         document.body.appendChild(a);
         a.click();
         a.remove();
