@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import {converterTypeList} from '../ConstData/IteamLists';
+import {converterInputTypeList, converterOutputTypeList, converterTypeList} from '../ConstData/IteamLists';
 import {useState} from "react";
 
 export function ConverterSelector({SelectorChange})
@@ -59,14 +59,14 @@ export function ConverterSelector({SelectorChange})
             <label>
                 Input Type
                 <select value={internalInputType}  onChange={(e) => InternalInputSelectionChange(e.target.value)} name="selectedFruit">
-                    {converterTypeList.map(item =>
+                    {converterInputTypeList.map(item =>
                         <option value={item.value}>{item.title}</option>)}
                 </select>
             </label>
             <label>
                 convert to Type
                 <select value={internalOutputType} onChange={(e)=> InternalOutputSelectionChange(e.target.value)} name="selectedFruit">
-                    {converterTypeList.map(item =>
+                    {converterOutputTypeList.map(item =>
                         <option value={item.value}>{item.title}</option>)}
                 </select>
             </label>

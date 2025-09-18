@@ -5,12 +5,15 @@ namespace ToolityAPI.Services.Converters;
 
 public enum ConverterType
 {
-    Pngtojpg
+    PNG = 0,
+    JPEG = 1,
+    WEBP = 2,
+    HEIC = 3,
 }
 
 public interface IImageConverter
 {
-    public Task<string> ConvertImage( string id ,IList<string> files , ConverterType converterType);
+    public Task<string> Convert( string id ,IList<string> files , ConverterType converterType);
 }
 
 public interface IImageConverterStrategy
@@ -18,8 +21,16 @@ public interface IImageConverterStrategy
     public Task<IList<string>> Convert (IList<string> files );
 }
 
-public class PngtoJpgConverterStrategy : IImageConverterStrategy
+public class MagickConverterStrategy : IImageConverterStrategy
 {
+    private readonly string _extension;
+    private readonly MagickFormat _type;
+
+    public MagickConverterStrategy(string extension , MagickFormat type)
+    {
+        _extension = extension;
+        _type = type;
+    }
     public async Task<IList<string>> Convert(IList<string> files)
     {
         var tasks = files.Select(file =>  Convert(file));
@@ -27,16 +38,16 @@ public class PngtoJpgConverterStrategy : IImageConverterStrategy
         return convertedFiles.ToList();
     }
     
-    private static Task<string> Convert(string pngPath )
+    private  Task<string> Convert(string pngPath )
     {
         var token = new TaskCompletionSource<string>();
-        var jpgPath = Path.ChangeExtension(pngPath, "jpg");                          
+        var jpgPath = Path.ChangeExtension(pngPath, _extension);                          
         Task.Run(() =>  
         {
             using (FileStream image = File.Open(pngPath, FileMode.Open, FileAccess.Read, FileShare.None))
             {
                 using var magicImage = new MagickImage(image);
-                magicImage.Format = MagickFormat.Jpeg;
+                magicImage.Format = _type;
                 var data = magicImage.ToByteArray();
                 using (FileStream fs = File.Create(jpgPath))
                 {
@@ -69,7 +80,11 @@ public class ImageConverterStrategyFactory : IDisposable
     {
         _converters = new Dictionary<ConverterType, IImageConverterStrategy>
         {
-            [ConverterType.Pngtojpg] = new PngtoJpgConverterStrategy(),
+            [ConverterType.WEBP] = new MagickConverterStrategy("webp" , MagickFormat.WebP),
+            [ConverterType.HEIC] = new MagickConverterStrategy("heic" , MagickFormat.Heic),
+            [ConverterType.PNG] = new MagickConverterStrategy("png" , MagickFormat.Png),
+            [ConverterType.JPEG] = new MagickConverterStrategy("jpeg" , MagickFormat.Jpeg),
+
         };
     }
 
@@ -89,7 +104,7 @@ public class ImageConverterService : IImageConverter
     {
         _factory = factory;
     }
-    public async Task<string> ConvertImage(string id ,IList<string> files, ConverterType converterType)
+    public async Task<string> Convert(string id ,IList<string> files, ConverterType converterType)
     {
         var convertedFiles = await _factory.GetStragetype(converterType).Convert(files);
         var zipPath = Path.Combine(UPLOAD_Fils_PATH , $"{id}.zip");

@@ -5,11 +5,11 @@ using ToolityAPI.Services.Converters;
 
 namespace ToolityAPI.Controllers;
 
-public class PNGtoAnyControler : Controller
+public class AnyImageControler : Controller
 {
     private  string UPLOAD_Fils_PATH = $"{Directory.GetCurrentDirectory()}/uploads";
     private readonly IImageConverter _imageConverter;
-    public PNGtoAnyControler(IImageConverter imageConverter)
+    public AnyImageControler(IImageConverter imageConverter)
     {
         _imageConverter = imageConverter;
     }

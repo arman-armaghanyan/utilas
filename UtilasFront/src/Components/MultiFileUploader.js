@@ -39,6 +39,18 @@ const MultiFileUploader = () => {
     }
   };
 
+  const getConvertedFiles = (id , resultFileType , sourceFileType) => {
+    const myHeaders = new Headers();
+    myHeaders.append("accept", "*/*");
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    return  fetch("http://localhost:5033/image_convertor_download?SessionId="+ id + "&ResultFileType="+resultFileType+"&SourceFileType=" + sourceFileType, requestOptions)
+  }
   // Handle multiple file upload with proper multipart/form-data
   const handleUpload = async () =>
   {
@@ -69,7 +81,7 @@ const MultiFileUploader = () => {
       console.log('Total files to upload:', selectedFiles.length);
 
       // Send POST request with multipart/form-data to your specific endpoint
-      const response = await fetch('https://localhost:7178/png_to_any_upload', {
+      const response = await fetch('http://localhost:5033/image_convertor_upload', {
         method: 'POST',
         headers: {
           'accept': '*/*',
@@ -79,18 +91,17 @@ const MultiFileUploader = () => {
       // Handle the response
       if (response.ok) {
         const responseData = await response.json();
-        console.log('Upload successful:', responseData["resultId"]);
+        console.log('Upload successful:', responseData["sessionId"]);
 
-        const response1 = await fetch('https://localhost:7178/png_to_any_download?ResultId=' + responseData["resultId"] , {
-          method: 'GET'});
+        const responseFile = await getConvertedFiles(responseData["sessionId"] , 2 ,2);
 
         //image download implementation
-        const blob = await response1.blob(); // Convert to Blob (binary)
+        const blob = await responseFile.blob(); // Convert to Blob (binary)
         const url = window.URL.createObjectURL(blob); // Create temporary URL
         console.log('URL successful:', url);
         const a = document.createElement("a");
         a.href = url;
-        a.download = responseData["resultId"] + ".zip"; // 🔁 Set filename
+        a.download = responseData["sessionId"] + ".zip"; // 🔁 Set filename
         document.body.appendChild(a);
         a.click();
         a.remove();
