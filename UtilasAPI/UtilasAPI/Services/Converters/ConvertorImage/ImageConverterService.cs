@@ -1,28 +1,23 @@
 using System.IO.Compression;
+using ToolityAPI.Models.Convertors;
 
 namespace ToolityAPI.Services.Converters.ConvertorImage;
 
 public class ImageConverterService : IImageConverter
 {
-    private  string UPLOAD_Fils_PATH = $"{Directory.GetCurrentDirectory()}/uploads";
+    private readonly string UPLOAD_Fils_PATH = $"{Directory.GetCurrentDirectory()}/uploads";
 
     private readonly ImageConverterFactory _factory;
+    private readonly FileManager _fileManager;
 
-    public ImageConverterService(ImageConverterFactory factory)
+    public ImageConverterService(ImageConverterFactory factory , FileManager fileManager)
     {
         _factory = factory;
+        _fileManager = fileManager;
     }
-    public async Task<string> Convert(string id ,IList<string> files, ImageType sourceImageType  , ImageType resultImageType )
+    public async Task<string> Convert(string sessionId ,IList<string> files, ImageType sourceImageType  , ImageType resultImageType )
     {
         var convertedFiles = await _factory.GetStragetype(resultImageType).Convert(files , sourceImageType);
-        var zipPath = Path.Combine(UPLOAD_Fils_PATH , $"{id}.zip");
-
-        using (ZipArchive archive = ZipFile.Open(zipPath, ZipArchiveMode.Update))
-        {
-            foreach (var file in convertedFiles)
-                archive.CreateEntryFromFile(file, file.Split("/").Last());
-        }
-
-        return zipPath;
+        return _fileManager.ZipFile(sessionId , convertedFiles);
     }
 }

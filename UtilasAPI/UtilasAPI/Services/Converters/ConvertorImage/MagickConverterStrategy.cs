@@ -1,6 +1,28 @@
 using ImageMagick;
+using ToolityAPI.Models.Convertors;
 
 namespace ToolityAPI.Services.Converters.ConvertorImage;
+
+public class LibHeifConverterStrategy : IImageConverterStrategy
+{
+    public async Task<IList<string>> Convert(IList<string> files, ImageType imageType)
+    {
+        var tasks = files.Select(file =>  Convert(file));
+        var convertedFiles = await Task.WhenAll(tasks);
+        return convertedFiles.ToList();
+    }
+
+    private Task<string> Convert(string imagePath)
+    {
+        var token = new TaskCompletionSource<string>();
+        var resultPath = Path.ChangeExtension(imagePath,".heic");                          
+        Task.Run(() =>  
+        {
+
+        });
+        return token.Task;
+    }
+}
 
 public class MagickConverterStrategy : IImageConverterStrategy
 {
@@ -12,30 +34,26 @@ public class MagickConverterStrategy : IImageConverterStrategy
         _extension = extension;
         _type = type;
     }
-    public async Task<IList<string>> Convert(IList<string> files)
+    
+    public async Task<IList<string>> Convert(IList<string> files , ImageType format)
     {
         var tasks = files.Select(file =>  Convert(file));
         var convertedFiles = await Task.WhenAll(tasks);
         return convertedFiles.ToList();
     }
     
-    private  Task<string> Convert(string pngPath )
+    private  Task<string> Convert(string imagePath )
     {
         var token = new TaskCompletionSource<string>();
-        var jpgPath = Path.ChangeExtension(pngPath, _extension);                          
+        var resultPath = Path.ChangeExtension(imagePath, _extension);                          
         Task.Run(() =>  
         {
-            using (FileStream image = File.Open(pngPath, FileMode.Open, FileAccess.Read, FileShare.None))
+            using (var image = new MagickImage(imagePath))
             {
-                using var magicImage = new MagickImage(image);
-                magicImage.Format = _type;
-                var data = magicImage.ToByteArray();
-                using (FileStream fs = File.Create(jpgPath))
-                {
-                    fs.Write(data, 0, data.Length);
-                } 
-                token.SetResult(jpgPath);
+                image.Format = _type;
+                image.Write(resultPath);
             }
+            token.SetResult(resultPath);
         });
         return token.Task;
     }

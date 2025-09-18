@@ -1,6 +1,8 @@
+using ToolityAPI.Models.Convertors;
+
 namespace ToolityAPI.Services.Converters.ConvertorImage;
 
 public interface IImageConverterStrategy
 {
-    public Task<IList<string>> Convert (IList<string> files );
+    public Task<IList<string>> Convert (IList<string> files , ImageType imageType);
 }

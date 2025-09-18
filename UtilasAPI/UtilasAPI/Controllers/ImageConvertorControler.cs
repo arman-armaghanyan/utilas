@@ -1,54 +1,38 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using ToolityAPI.DTOs;
-using ToolityAPI.Services.Converters;
+using ToolityAPI.Services.Converters.ConvertorImage;
 
-namespace ToolityAPI.Controllers;
 
-public class AnyImageControler : Controller
+public class ImageConvertorControler : Controller
 {
-    private  string UPLOAD_Fils_PATH = $"{Directory.GetCurrentDirectory()}/uploads";
     private readonly IImageConverter _imageConverter;
-    public AnyImageControler(IImageConverter imageConverter)
+    private readonly FileManager _fileManager;
+
+    public ImageConvertorControler(IImageConverter imageConverter ,  FileManager fileManager)
     {
         _imageConverter = imageConverter;
+        _fileManager = fileManager;
     }
     
-    [HttpGet("png_to_any_download")]  
-    public async Task<IActionResult> GetFileById(FileUploadDTO uploadId)
+    [HttpGet("image_convertor_download")]  
+    public async Task<IActionResult> GetFileById(FileConvertingDTO convertingDTO )
     {
-        var uploadPath = Directory.CreateDirectory( Path.Combine(UPLOAD_Fils_PATH , uploadId.ResultId));
-        var files = Directory.GetFiles(uploadPath.FullName).ToList();
+        var files = _fileManager.GetFilesByID(convertingDTO.SessionId);
 
-        var path = await _imageConverter.ConvertImage(files, ConverterType.Pngtojpg);
+        var path = await _imageConverter.Convert(convertingDTO.SessionId , files, convertingDTO.SourceFileType, convertingDTO.ResultFileType );
         if (System.IO.File.Exists(path))  
-        {  
             return File(System.IO.File.OpenRead(path), "application/octet-stream", Path.GetFileName(path));  
-        }  
         return NotFound();  
     }  
     
-    [HttpPost("png_to_any_upload")]
-    public async Task<IActionResult> Upload(FileUploadDTO uploadId)
+    [HttpPost("image_convertor_upload")] 
+    public async Task<IActionResult> Upload(string sessionId)
     {
+
         IFormFileCollection files = Request.Form.Files;
-        var currentUploadPath = !String.IsNullOrEmpty(uploadId.ResultId)? this.GetHashCode().ToString() : uploadId.ResultId;
-        if (!Directory.Exists(UPLOAD_Fils_PATH))
-        {
-            Directory.CreateDirectory(UPLOAD_Fils_PATH);
-        }
-        var uploadPath = Directory.CreateDirectory( Path.Combine(UPLOAD_Fils_PATH , currentUploadPath));
- 
-        foreach (var file in files)
-        {
-            string fullPath = $"{uploadPath}/{file.FileName}";
-            
-            using (var fileStream = new FileStream(fullPath, FileMode.Create))
-            {
-                await file.CopyToAsync(fileStream);
-            }
-        }
+        var currentUploadPath = String.IsNullOrEmpty(sessionId)?  Guid.NewGuid().ToString() : sessionId;
         
-        return Ok(new FileUploadDTO(){ResultId = currentUploadPath});
+        await _fileManager.UploadFiles(files, currentUploadPath);
+        return Ok(new FileConvertingDTO(){SessionId = currentUploadPath});
     }
 }

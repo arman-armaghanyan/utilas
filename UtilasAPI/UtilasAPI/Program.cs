@@ -1,4 +1,4 @@
-using ToolityAPI.Services.Converters;
+using ToolityAPI.Services.Converters.ConvertorImage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +6,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ImageConverterStrategyFactory>();
+builder.Services.AddScoped<ImageConverterFactory>();
 builder.Services.AddScoped<IImageConverter , ImageConverterService>();
+builder.Services.AddSingleton<FileManager>();
 
 builder.Services.AddCors(options =>
 {

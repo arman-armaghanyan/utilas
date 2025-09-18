@@ -1,6 +1,11 @@
+using ToolityAPI.Models.Convertors;
+
 namespace ToolityAPI.DTOs;
 
-public class FileUploadDTO
+public class FileConvertingDTO
 {
-    public string ResultId { get; set; }
+    public string SessionId { get; set; }
+    public ImageType ResultFileType {get; set;}
+    public ImageType SourceFileType {get; set;}
+
 }

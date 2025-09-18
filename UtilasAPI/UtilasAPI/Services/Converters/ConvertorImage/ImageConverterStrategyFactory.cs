@@ -1,31 +1,32 @@
 using ImageMagick;
+using ToolityAPI.Models.Convertors;
 
 namespace ToolityAPI.Services.Converters.ConvertorImage;
 
-public class ImageConverterStrategyFactory : IDisposable
+public class ImageConverterFactory : IDisposable
 {
-    private Dictionary<ConverterType, IImageConverterStrategy> _converters;
+    private Dictionary<ImageType, IImageConverterStrategy> _converters;
 
-    public ImageConverterStrategyFactory()
+    public ImageConverterFactory()
     {
         RegistretStrategys();
     }
 
-    public IImageConverterStrategy GetStragetype(ConverterType converterType)
+    public IImageConverterStrategy GetStragetype(ImageType imageType)
     {
-        if(!_converters.ContainsKey(converterType))
-            throw new NotImplementedException(converterType.ToString()); 
-        return _converters[converterType];
+        if(!_converters.ContainsKey(imageType))
+            throw new NotImplementedException(imageType.ToString()); 
+        return _converters[imageType];
     }
     
     private void RegistretStrategys()
     {
-        _converters = new Dictionary<ConverterType, IImageConverterStrategy>
+        _converters = new Dictionary<ImageType, IImageConverterStrategy>
         {
-            [ConverterType.WEBP] = new MagickConverterStrategy("webp" , MagickFormat.WebP),
-            [ConverterType.HEIC] = new MagickConverterStrategy("heic" , MagickFormat.Heic),
-            [ConverterType.PNG] = new MagickConverterStrategy("png" , MagickFormat.Png),
-            [ConverterType.JPEG] = new MagickConverterStrategy("jpeg" , MagickFormat.Jpeg),
+            [ImageType.WEBP] = new MagickConverterStrategy("webp" , MagickFormat.WebP),
+            [ImageType.HEIC] = new MagickConverterStrategy("heic" , MagickFormat.Heic),
+            [ImageType.PNG] = new MagickConverterStrategy("png" , MagickFormat.Png),
+            [ImageType.JPEG] = new MagickConverterStrategy("jpeg" , MagickFormat.Jpeg),
 
         };
     }
