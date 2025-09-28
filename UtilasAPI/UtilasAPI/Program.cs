@@ -1,3 +1,5 @@
+using ImageMagick;
+using ToolityAPI.Services;
 using ToolityAPI.Services.Converters.ConvertorImage;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,16 +11,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ImageConverterFactory>();
 builder.Services.AddScoped<IImageConverter , ImageConverterService>();
 builder.Services.AddSingleton<FileManager>();
+builder.Services.AddScoped<IImageResizeService, MagickImageResizeService>();
+builder.Services.AddScoped<IProfileImage, MagicProfileImageService>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .AllowAnyOrigin() 
             .AllowAnyHeader()
             .AllowAnyMethod();
-    });
+    }); 
 });
 
 var app = builder.Build();

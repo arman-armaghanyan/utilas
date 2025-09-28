@@ -1,8 +1,6 @@
-using System.Security;
-
 namespace ToolityAPI.DTOs;
 
-public class FileUploadingDTO
+public class FileSessionDTO
 {
     public string SessionId { set; get; }
 }

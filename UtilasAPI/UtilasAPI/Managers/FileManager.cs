@@ -43,4 +43,10 @@ public class FileManager
             }
         }
     }
+
+    public string GetZipFile(string sessionDtoSessionId)
+    {
+        var path = Path.Combine(UPLOAD_Fils_PATH , $"{sessionDtoSessionId}.zip");
+        return File.Exists(path)? path : string.Empty;
+    }
 }

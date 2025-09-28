@@ -15,9 +15,9 @@ public class ImageConverterService : IImageConverter
         _factory = factory;
         _fileManager = fileManager;
     }
-    public async Task<string> Convert(string sessionId ,IList<string> files, ImageType sourceImageType  , ImageType resultImageType )
+    public async Task<string> Convert(string sessionId ,IList<string> files, int compresionLevel  , ImageType resultImageType )
     {
-        var convertedFiles = await _factory.GetStragetype(resultImageType).Convert(files , sourceImageType);
+        var convertedFiles = await _factory.GetStragetype(resultImageType).Convert(files , compresionLevel);
         return _fileManager.ZipFile(sessionId , convertedFiles);
     }
 }

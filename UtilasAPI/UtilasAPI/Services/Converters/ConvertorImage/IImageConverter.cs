@@ -4,5 +4,5 @@ namespace ToolityAPI.Services.Converters.ConvertorImage;
 
 public interface IImageConverter
 {
-    public Task<string> Convert( string sessionId ,IList<string> files , ImageType sourceImageType  , ImageType resultImageType );
+    public Task<string> Convert( string sessionId ,IList<string> files ,  int CompressionLevel  , ImageType resultImageType );
 }

@@ -23,11 +23,9 @@ public class ImageConverterFactory : IDisposable
     {
         _converters = new Dictionary<ImageType, IImageConverterStrategy>
         {
-            [ImageType.WEBP] = new MagickConverterStrategy("webp" , MagickFormat.WebP),
-            [ImageType.HEIC] = new MagickConverterStrategy("heic" , MagickFormat.Heic),
+            [ImageType.WEBP] = new MagickConverterStrategy("webp" , MagickFormat.WebP , CompressionMethod.WebP, MagickColors.White),
             [ImageType.PNG] = new MagickConverterStrategy("png" , MagickFormat.Png),
-            [ImageType.JPEG] = new MagickConverterStrategy("jpeg" , MagickFormat.Jpeg),
-
+            [ImageType.JPEG] = new MagickConverterStrategy("jpeg" , MagickFormat.Jpeg , CompressionMethod.JPEG , MagickColors.White), 
         };
     }
 
