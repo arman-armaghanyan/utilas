@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    color-scheme: light;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #0b1120;
+    color: #0f172a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at top, #f9f5ff 0%, #edf2ff 45%, #dbeafe 100%);
+    min-height: 100vh;
+    color: #0b1220;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px clamp(20px, 6vw, 56px);
+    background: rgba(15, 23, 42, 0.82);
+    color: #f8fafc;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+    z-index: 1000;
+}
+
+.app-header__brand {
+    display: grid;
+    gap: 6px;
+}
+
+.app-header__logo {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.app-header__logo span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #a855f7, #6366f1);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+}
+
+.app-header__tagline {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(248, 250, 252, 0.75);
+}
+
+.app-header__nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 3vw, 22px);
+    flex-wrap: wrap;
+}
+
+.app-header__nav-link {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: rgba(248, 250, 252, 0.8);
+    transition: color 0.2s ease;
+}
+
+.app-header__nav-link:hover {
+    color: #fff;
+}
+
+.app-header__cta {
+    padding: 9px 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #6366f1, #22d3ee);
+    color: #0f172a;
+    font-weight: 600;
+    box-shadow: 0 12px 24px -12px rgba(99, 102, 241, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-header__cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 32px -16px rgba(99, 102, 241, 0.55);
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px clamp(16px, 8vw, 24px);
+    }
+
+    .app-header__nav {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .app-header__cta {
+        order: -1;
+    }
+}
+
