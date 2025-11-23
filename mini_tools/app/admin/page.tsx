@@ -12,6 +12,8 @@ import {
   updateTool,
   uploadReactApp,
 } from "@/lib/api";
+import ToolFormModal from "@/Components/ToolFormModal";
+import MiniToolListItem from "@/Components/MiniToolListItem";
 
 const defaultForm: MiniToolPayload = {
   id: "",
@@ -33,6 +35,7 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [reactAppFile, setReactAppFile] = useState<File | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     refreshTools();
@@ -62,6 +65,14 @@ export default function AdminPage() {
     setFormData(defaultForm);
     setEditing(null);
     setReactAppFile(null);
+    setIsModalOpen(false);
+    setError(null);
+    setSuccessMessage(null);
+  }
+
+  function openAddModal() {
+    resetForm();
+    setIsModalOpen(true);
   }
 
   function onEdit(tool: MiniTool) {
@@ -77,7 +88,9 @@ export default function AdminPage() {
       appType: tool.appType || "html",
     });
     setReactAppFile(null);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setIsModalOpen(true);
+    setError(null);
+    setSuccessMessage(null);
   }
 
   async function onDelete(tool: MiniTool) {
@@ -143,8 +156,8 @@ export default function AdminPage() {
         
         const created = await createTool(payload);
         
-        // If React app, upload the file
-        if (payload.appType === "react" && reactAppFile) {
+
+        if (reactAppFile) {
           await uploadReactApp(created.id, reactAppFile);
           setSuccessMessage(`Created ${created.title} and uploaded React app.`);
         } else {
@@ -152,6 +165,7 @@ export default function AdminPage() {
         }
       }
       resetForm();
+      setIsModalOpen(false);
       await refreshTools();
     } catch (err) {
       const message =
@@ -185,191 +199,38 @@ export default function AdminPage() {
             and edit the HTML rendered in iframes.
           </p>
         </div>
-        <Link
-          href="/"
-          className="text-sm font-medium text-blue-600 hover:underline"
-        >
-          ← Back to library
-        </Link>
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={openAddModal}
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+          >
+            + Add Tool
+          </button>
+          <Link
+            href="/"
+            className="text-sm font-medium text-blue-600 hover:underline"
+          >
+            ← Back to library
+          </Link>
+        </div>
       </div>
 
-      <section className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-6 shadow-sm">
-        <header>
-          <h2 className="text-xl font-semibold text-zinc-900">{headerTitle}</h2>
-          <p className="text-sm text-zinc-500">
-            {formData.appType === "html"
-              ? "Provide the iframe HTML snippet exactly as you want it rendered."
-              : "Upload a zip file containing your built React app (must include index.html)."}
-          </p>
-        </header>
-
-        {error && (
-          <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-            {error}
-          </div>
-        )}
-
-        {successMessage && (
-          <div className="rounded-md border border-green-200 bg-green-50 p-4 text-sm text-green-700">
-            {successMessage}
-          </div>
-        )}
-
-        <form className="grid gap-4 md:grid-cols-2" onSubmit={onSubmit}>
-          <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">
-            Tool ID
-            <input
-              type="text"
-              placeholder="e.g. color-helper"
-              className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-              required
-              {...bindField("id")}
-              disabled={Boolean(editing)}
-            />
-            <span className="text-xs font-normal text-zinc-500">
-              Used as the API identifier and URL segment.
-            </span>
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">
-            Title
-            <input
-              type="text"
-              placeholder="Tool name"
-              className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-              required
-              {...bindField("title")}
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 md:col-span-2">
-            Summary
-            <input
-              type="text"
-              placeholder="Short pitch for the tool"
-              className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-              required
-              {...bindField("summary")}
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 md:col-span-2">
-            Description
-            <textarea
-              placeholder="Explain what this mini tool does and how to use it."
-              className="h-32 rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-              required
-              {...bindField("description")}
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">
-            Thumbnail URL
-            <input
-              type="url"
-              placeholder="https://"
-              className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-              required
-              {...bindField("thumbnail")}
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">
-            Iframe slug
-            <input
-              type="text"
-              placeholder="color-helper"
-              className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-              required
-              {...bindField("iframeSlug")}
-            />
-          </label>
-
-          <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700">
-            App Type
-            <select
-              className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-              value={formData.appType || "html"}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  appType: e.target.value as "html" | "react",
-                }))
-              }
-              disabled={Boolean(editing)}
-            >
-              <option value="html">HTML</option>
-              <option value="react">React App</option>
-            </select>
-            {editing && (
-              <span className="text-xs font-normal text-zinc-500">
-                App type cannot be changed after creation.
-              </span>
-            )}
-          </label>
-
-          {formData.appType === "html" ? (
-            <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 md:col-span-2">
-              Iframe HTML
-              <textarea
-                placeholder="<html>...</html>"
-                className="h-48 rounded border border-zinc-300 px-3 py-2 font-mono text-xs text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                required={formData.appType === "html"}
-                {...bindField("iframeHtml")}
-              />
-            </label>
-          ) : (
-            <label className="flex flex-col gap-2 text-sm font-medium text-zinc-700 md:col-span-2">
-              React App (ZIP file)
-              <input
-                type="file"
-                accept=".zip,application/zip"
-                className="rounded border border-zinc-300 px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    setReactAppFile(file);
-                  }
-                }}
-                required={!editing && formData.appType === "react"}
-              />
-              <span className="text-xs font-normal text-zinc-500">
-                Upload a zip file containing your built React app. Must include index.html in the root.
-              </span>
-              {reactAppFile && (
-                <span className="text-xs font-normal text-green-600">
-                  Selected: {reactAppFile.name}
-                </span>
-              )}
-              {editing && editing.appType === "react" && editing.reactAppUrl && (
-                <span className="text-xs font-normal text-zinc-500">
-                  Current app URL: {editing.reactAppUrl}
-                </span>
-              )}
-            </label>
-          )}
-
-          <div className="flex items-center gap-3 md:col-span-2">
-            <button
-              type="submit"
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-zinc-300"
-              disabled={saving}
-            >
-              {saving ? "Saving..." : editing ? "Update tool" : "Create tool"}
-            </button>
-            {editing && (
-              <button
-                type="button"
-                className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-600 transition hover:bg-zinc-50"
-                onClick={resetForm}
-                disabled={saving}
-              >
-                Cancel edit
-              </button>
-            )}
-          </div>
-        </form>
-      </section>
+      <ToolFormModal
+        isOpen={isModalOpen}
+        formData={formData}
+        editing={editing}
+        error={error}
+        successMessage={successMessage}
+        saving={saving}
+        reactAppFile={reactAppFile}
+        headerTitle={headerTitle}
+        onClose={resetForm}
+        onSubmit={onSubmit}
+        bindField={bindField}
+        setFormData={setFormData}
+        setReactAppFile={setReactAppFile}
+      />
 
       <section className="flex flex-col gap-4">
         <header className="flex items-center justify-between">
@@ -390,53 +251,14 @@ export default function AdminPage() {
         ) : (
           <div className="grid gap-4">
             {tools.map((tool) => (
-              <article
+              <MiniToolListItem
                 key={tool.id}
-                className="flex flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-5 shadow-sm md:flex-row md:items-center md:justify-between"
-              >
-                <div>
-                  <h3 className="text-lg font-semibold text-zinc-900">
-                    {tool.title}
-                  </h3>
-                  <p className="mt-1 text-sm text-zinc-600">{tool.summary}</p>
-                  <div className="mt-2 flex flex-wrap items-center gap-3 text-xs uppercase tracking-wide text-zinc-400">
-                    <span>ID: {tool.id}</span>
-                    <span>Slug: {tool.iframeSlug}</span>
-                    <span>Type: {tool.appType || "html"}</span>
-                  </div>
-                  {tool.iframeFullUrl && (
-                    <div className="mt-2 rounded bg-zinc-50 p-2">
-                      <p className="text-xs font-semibold text-zinc-700 mb-1">Full URL (for external use):</p>
-                      <code className="text-xs text-zinc-600 break-all">{tool.iframeFullUrl}</code>
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <Link
-                    href={`/tools/${tool.id}`}
-                    className="rounded-md border border-zinc-300 px-3 py-2 text-sm font-medium text-zinc-600 transition hover:bg-zinc-50"
-                    target="_blank"
-                  >
-                    View
-                  </Link>
-                  <button
-                    type="button"
-                    className="rounded-md border border-blue-500 px-3 py-2 text-sm font-medium text-blue-600 transition hover:bg-blue-50"
-                    onClick={() => onEdit(tool)}
-                    disabled={saving && editing?.id === tool.id}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded-md border border-red-500 px-3 py-2 text-sm font-medium text-red-600 transition hover:bg-red-50"
-                    onClick={() => onDelete(tool)}
-                    disabled={saving}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </article>
+                tool={tool}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                saving={saving}
+                editing={editing}
+              />
             ))}
           </div>
         )}

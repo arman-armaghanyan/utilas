@@ -107,7 +107,7 @@ export function deleteTool(id: string): Promise<void> {
   return request<void>(`/api/tools/${id}`, { method: "DELETE" });
 }
 
-export function uploadReactApp(
+ export async function uploadReactApp(
   id: string,
   file: File
 ): Promise<MiniTool> {

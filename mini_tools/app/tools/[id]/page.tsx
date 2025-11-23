@@ -1,3 +1,5 @@
+
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,6 +14,8 @@ export const dynamic = "force-dynamic";
 export default async function ToolDetailPage({
   params,
 }: ToolPageProps) {
+
+
   const { id } = await params;
 
   let tool: Awaited<ReturnType<typeof getTool>> | null = null;
@@ -30,13 +34,6 @@ export default async function ToolDetailPage({
     notFound();
   }
 
-  const apiBase =
-    process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") || "";
-  
-  // Use the iframeUrl from the model (already contains the full path)
-  const iframeSrc = apiBase 
-    ? `${apiBase}${tool.iframeUrl}` 
-    : tool.iframeUrl;
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-10 px-6 py-12">
@@ -86,14 +83,10 @@ export default async function ToolDetailPage({
               </p>
             </div>
           )}
-          <div className="rounded bg-zinc-100 p-2">
-            <p className="text-xs font-semibold text-zinc-700 mb-1">Relative Path:</p>
-            <code className="text-xs text-zinc-600">{tool.iframeUrl}</code>
-          </div>
         </div>
         <iframe
           title={tool.title}
-          src={iframeSrc}
+          src={tool.iframeUrl}
           className="h-[600px] w-full rounded-md border border-zinc-200 bg-white"
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
           allow="fullscreen"
