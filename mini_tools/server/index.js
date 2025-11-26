@@ -7,8 +7,7 @@ const { app, registerErrorHandler } = require("./app");
 const { connectDB } = require("./db");
 const PORT = process.env.PORT || 4010;
 process.env.PORT = String(PORT);
-process.env.API_BASE_URL =
-  process.env.API_BASE_URL || `http://127.0.0.1:${PORT}`;
+process.env.API_BASE_URL = process.env.API_BASE_URL || `http://127.0.0.1:${PORT}`;
 const DEFAULT_URI = "mongodb://127.0.0.1:27017/mini-tools";
 const MONGODB_URI = process.env.MONGODB_URI || DEFAULT_URI;
 

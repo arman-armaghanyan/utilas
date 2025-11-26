@@ -179,7 +179,7 @@ router.post("/:id/upload-react-app", upload.single("reactApp"), async (req, res,
     }
 
     console.log(`[Upload] index.html found, proceeding to save file`);
-    const zipFilePath = await storeZipFileOnDiskAsync(tool.id,req.file.buffer ,req.file.buffer.length)
+    const zipFilePath = await storeZipFileOnDiskAsync(tool.id,req.file.buffer  ,req.file.buffer.length)
     console.log(`[Upload] File saved successfully: ${zipFilePath}`);
 
     // Delete old zip file if it exists
