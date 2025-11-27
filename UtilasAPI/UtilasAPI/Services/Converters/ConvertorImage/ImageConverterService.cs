@@ -1,14 +1,11 @@
-using System.IO.Compression;
-using ToolityAPI.Models.Convertors;
+using ToolityAPI.Models.ImageProcessing;
 
 namespace ToolityAPI.Services.Converters.ConvertorImage;
 
-public class ImageConverterService : IImageConverter
+public class ImageConverterService : IImageConverter , IDisposable
 {
-    private readonly string UPLOAD_Fils_PATH = $"{Directory.GetCurrentDirectory()}/uploads";
-
-    private readonly ImageConverterFactory _factory;
-    private readonly FileManager _fileManager;
+    private  ImageConverterFactory _factory;
+    private  FileManager _fileManager;
 
     public ImageConverterService(ImageConverterFactory factory , FileManager fileManager)
     {
@@ -17,7 +14,13 @@ public class ImageConverterService : IImageConverter
     }
     public async Task<string> Convert(string sessionId ,IList<string> files, int compresionLevel  , ImageType resultImageType )
     {
-        var convertedFiles = await _factory.GetStragetype(resultImageType).Convert(files , compresionLevel);
+        var convertedFiles = await _factory.GetStrategyType(resultImageType).Convert(files , compresionLevel);
         return _fileManager.ZipFile(sessionId , convertedFiles);
+    }
+
+    public void Dispose()
+    {
+        _factory = null;
+        _fileManager = null;
     }
 }

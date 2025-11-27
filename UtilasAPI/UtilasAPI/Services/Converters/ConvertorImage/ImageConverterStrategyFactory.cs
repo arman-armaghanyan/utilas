@@ -1,5 +1,5 @@
 using ImageMagick;
-using ToolityAPI.Models.Convertors;
+using ToolityAPI.Models.ImageProcessing;
 
 namespace ToolityAPI.Services.Converters.ConvertorImage;
 
@@ -9,17 +9,17 @@ public class ImageConverterFactory : IDisposable
 
     public ImageConverterFactory()
     {
-        RegistretStrategys();
+        RegisterStrategies();
     }
 
-    public IImageConverterStrategy GetStragetype(ImageType imageType)
+    public IImageConverterStrategy GetStrategyType(ImageType imageType)
     {
         if(!_converters.ContainsKey(imageType))
             throw new NotImplementedException(imageType.ToString()); 
         return _converters[imageType];
     }
     
-    private void RegistretStrategys()
+    private void RegisterStrategies()
     {
         _converters = new Dictionary<ImageType, IImageConverterStrategy>
         {

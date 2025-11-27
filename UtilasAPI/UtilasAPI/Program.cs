@@ -1,6 +1,8 @@
 using ImageMagick;
 using ToolityAPI.Services;
 using ToolityAPI.Services.Converters.ConvertorImage;
+using ToolityAPI.Services.ImageProfile;
+using ToolityAPI.Services.ImageResize;
 
 var builder = WebApplication.CreateBuilder(args);
 

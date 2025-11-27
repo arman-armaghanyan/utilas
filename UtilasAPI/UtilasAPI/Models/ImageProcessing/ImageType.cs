@@ -1,4 +1,4 @@
-namespace ToolityAPI.Models.Convertors;
+namespace ToolityAPI.Models.ImageProcessing;
 
 
 public enum ImageType

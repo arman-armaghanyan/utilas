@@ -1,12 +1,6 @@
 using ImageMagick;
 
-namespace ToolityAPI.Services;
-
-public interface IProfileImage
-{
-    Task<IList<string>> RemoveFilesAllProfileData(IList<string> files);
-    Task<string> RemoveFileAllProfileData(string file);
-}
+namespace ToolityAPI.Services.ImageProfile;
 
 public class MagicProfileImageService : IProfileImage
 {
