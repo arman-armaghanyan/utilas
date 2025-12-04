@@ -19,7 +19,7 @@ export function MiniToolDetail() {
             setError(null);
 
             try {
-                const response = await fetch('http://localhost:4010/api/tools');
+                const response = await fetch('http://localhost:4011/api/tools');
 
                 if (!response.ok) {
                     throw new Error(`Request failed with status ${response.status}`);

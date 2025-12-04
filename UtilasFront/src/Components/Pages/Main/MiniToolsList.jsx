@@ -15,7 +15,7 @@ export function MiniToolsList() {
             setError(null);
 
             try {
-                const response = await fetch('http://localhost:4010/api/tools');
+                const response = await fetch('http://localhost:4011/api/tools');
 
                 if (!response.ok) {
                     throw new Error(`Request failed with status ${response.status}`);
@@ -48,11 +48,11 @@ export function MiniToolsList() {
     return (
         <main className="page-shell" id="mini-tools">
             <section className="hero">
-                <span className="hero__eyebrow">Utilas Mini</span>
+                <span className="hero__eyebrow">Utilas</span>
                 <h1 className="hero__title">Discover compact productivity helpers</h1>
                 <p className="hero__subtitle">
                     A curated collection of in-browser utilities for design, collaboration, and content
-                    work. Jump into any tool instantly—no installs required.
+                    work.
                 </p>
             </section>
 
@@ -72,7 +72,6 @@ export function MiniToolsList() {
                             <div className="mini-card__content">
                                 <h2 className="mini-card__title">{tool.title}</h2>
                                 <p className="mini-card__summary">{tool.summary}</p>
-                                <span className="mini-card__cta">Open tool</span>
                             </div>
                         </article>
                     </Link>

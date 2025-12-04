@@ -1,29 +1,32 @@
 import {Link} from 'react-router-dom';
+import {useState} from 'react';
 import '../../ComponentStyles/HeaderCss.css';
 
 export function Header() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     return (
-        <header className="app-header">
+        <header className={`app-header ${isMenuOpen ? 'app-header--menu-open' : ''}`}>
             <div className="app-header__brand">
                 <Link to="/" className="app-header__logo">
-                    Utilas<span>Mini</span>
+                    Utilas
                 </Link>
-                <p className="app-header__tagline">Curated tools for everyday tasks</p>
             </div>
-            <nav className="app-header__nav">
-                <a href="#mini-tools" className="app-header__nav-link">
+            <button 
+                className="app-header__burger"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle menu"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav className={`app-header__nav ${isMenuOpen ? 'app-header__nav--open' : ''}`}>
+                <a href="#mini-tools" className="app-header__nav-link" onClick={() => setIsMenuOpen(false)}>
                     Tools
                 </a>
-                <a href="mailto:hello@utilas.app" className="app-header__nav-link">
+                <a href="mailto:hello@utilas.app" className="app-header__nav-link" onClick={() => setIsMenuOpen(false)}>
                     Contact
-                </a>
-                <a
-                    href="https://github.com/"
-                    className="app-header__cta"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    GitHub
                 </a>
             </nav>
         </header>
