@@ -3,13 +3,6 @@ import '../../ComponentStyles/MainLayout.css';
 export function Footer() {
     return (
         <footer className="app-footer">
-            <div className="app-footer__primary">
-                <span className="app-footer__logo">Utilas Mini</span>
-                <p className="app-footer__desc">
-                    Built for teams that move fast. Each tool runs in the browser and helps you unblock
-                    day-to-day workflows.
-                </p>
-            </div>
             <div className="app-footer__links">
                 <div>
                     <h3>Resources</h3>

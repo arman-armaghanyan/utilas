@@ -3,8 +3,19 @@
 :root {
     color-scheme: light;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: #0b1120;
     color: #0f172a;
+    
+    /* Type Scale - Major Third (1.25 ratio) */
+    --font-xs: 0.64rem;      /* 10.24px */
+    --font-sm: 0.8rem;       /* 12.8px */
+    --font-base: 1rem;       /* 16px */
+    --font-md: 1.25rem;      /* 20px */
+    --font-lg: 1.563rem;      /* 25px */
+    --font-xl: 1.953rem;      /* 31.25px */
+    --font-2xl: 2.441rem;    /* 39px */
+    --font-3xl: 3.052rem;    /* 48.8px */
+    --font-4xl: 3.815rem;    /* 61px */
+    --font-5xl: 4.768rem;    /* 76.3px */
 }
 
 * {
@@ -13,7 +24,7 @@
 
 body {
     margin: 0;
-    background: radial-gradient(circle at top, #f9f5ff 0%, #edf2ff 45%, #dbeafe 100%);
+    background: #ffffff;
     min-height: 100vh;
     color: #0b1220;
 }
@@ -25,99 +36,194 @@ a {
 
 .app-header {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px clamp(20px, 6vw, 56px);
-    background: rgba(15, 23, 42, 0.82);
-    color: #f8fafc;
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+    padding: 12px 20px;
+    background-color: #edededb8;
+    backdrop-filter: blur(24px);
+    color: #000000;
+    border-radius: 999px;
     z-index: 1000;
+    width: auto;
+    max-width: calc(100% - 32px);
+    gap: 20px;
+}
+
+@media (min-width: 480px) {
+    .app-header {
+        top: 18px;
+        padding: 12px 24px;
+        gap: 32px;
+        max-width: calc(100% - 40px);
+    }
+}
+
+@media (min-width: 640px) {
+    .app-header {
+        top: 20px;
+        padding: 14px 28px;
+        gap: 64px;
+        max-width: 90%;
+    }
+}
+
+@media (min-width: 768px) {
+    .app-header {
+        padding: 14px 30px;
+        gap: 120px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .app-header {
+        padding: 16px 32px;
+        gap: 196px;
+    }
 }
 
 .app-header__brand {
-    display: grid;
-    gap: 6px;
+    display: flex;
+    align-items: center;
 }
 
 .app-header__logo {
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-size: var(--font-lg);
     font-weight: 700;
     letter-spacing: -0.01em;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-}
-
-.app-header__logo span {
-    display: inline-flex;
-    align-items: center;
+    color: #000000;
+    min-height: 44px;
+    min-width: 44px;
     justify-content: center;
-    background: linear-gradient(135deg, #a855f7, #6366f1);
-    color: #fff;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 0.8rem;
 }
 
-.app-header__tagline {
-    margin: 0;
-    font-size: 0.85rem;
-    color: rgba(248, 250, 252, 0.75);
+@media (min-width: 480px) {
+    .app-header__logo {
+        font-size: var(--font-xl);
+    }
+}
+
+@media (min-width: 640px) {
+    .app-header__logo {
+        font-size: var(--font-2xl);
+    }
+}
+
+.app-header__burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.app-header__burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: #000000;
+    transition: all 0.3s ease;
+    border-radius: 2px;
 }
 
 .app-header__nav {
     display: flex;
     align-items: center;
-    gap: clamp(12px, 3vw, 22px);
-    flex-wrap: wrap;
+    gap: 16px;
 }
 
 .app-header__nav-link {
-    font-size: 0.92rem;
+    font-size: var(--font-base);
     font-weight: 500;
-    color: rgba(248, 250, 252, 0.8);
+    color: #000000;
     transition: color 0.2s ease;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
 }
 
 .app-header__nav-link:hover {
-    color: #fff;
+    color: rgba(0, 0, 0, 0.7);
 }
 
 .app-header__cta {
-    padding: 9px 18px;
+    padding: 10px 18px;
     border-radius: 999px;
-    background: linear-gradient(135deg, #6366f1, #22d3ee);
-    color: #0f172a;
+    background: #000000;
+    color: #ffffff;
     font-weight: 600;
-    box-shadow: 0 12px 24px -12px rgba(99, 102, 241, 0.5);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-size: var(--font-sm);
+    transition: background 0.2s ease;
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .app-header__cta:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 16px 32px -16px rgba(99, 102, 241, 0.55);
+    background: rgba(0, 0, 0, 0.8);
 }
 
-@media (max-width: 768px) {
-    .app-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 16px clamp(16px, 8vw, 24px);
+@media (max-width: 1023px) {
+    .app-header__burger {
+        display: flex;
     }
 
     .app-header__nav {
-        width: 100%;
-        justify-content: flex-start;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        background-color: #edededb8;
+        backdrop-filter: blur(24px);
+        border-radius: 16px;
+        padding: 12px;
+        gap: 4px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
     }
 
-    .app-header__cta {
-        order: -1;
+    .app-header__nav--open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .app-header__nav-link {
+        width: 100%;
+        padding: 12px 16px;
+        min-height: 44px;
+    }
+
+    .app-header--menu-open .app-header__burger span:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .app-header--menu-open .app-header__burger span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .app-header--menu-open .app-header__burger span:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
     }
 }
 
