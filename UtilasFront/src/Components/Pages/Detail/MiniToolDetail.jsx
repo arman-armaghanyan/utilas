@@ -78,18 +78,13 @@ export function MiniToolDetail() {
         );
     }
 
-    if (!tool) {
-        return (
-            <section className="detail-shell__empty">
-                <h2>Tool not found</h2>
-                <p>The mini app you are trying to open may have moved or been removed.</p>
-                {error ? <p>{error}</p> : null}
-                <Link to="/" className="detail-shell__home">
-                    Return home
-                </Link>
-            </section>
-        );
-    }
+    // Helper to extract text from rich content objects or plain strings
+    const getText = (field) => {
+        if (!field) return '';
+        if (typeof field === 'string') return field;
+        if (typeof field === 'object' && field.text) return field.text;
+        return '';
+    };
 
     return (
         <section className="detail-shell">
@@ -97,18 +92,18 @@ export function MiniToolDetail() {
                 ← Back
             </button>
             <header className="detail-shell__header">
-                <h1 className="detail-shell__title">{tool.title}</h1>
-                <p className="detail-shell__summary">{tool.summary}</p>
+                <h1 className="detail-shell__title">{getText(tool.title)}</h1>
+                <p className="detail-shell__summary">{getText(tool.summary)}</p>
             </header>
             <iframe
                 className="detail-shell__iframe"
                 src={tool.iframeUrl}
-                title={tool.title}
+                title={getText(tool.title)}
                 allow="clipboard-write; fullscreen; accelerometer; gyroscope"
             />
             <article className="detail-shell__info">
                 <h2>About this tool</h2>
-                <p>{tool.description}</p>
+                <p>{getText(tool.description)}</p>
                 <a
                     className="detail-shell__visit"
                     href={tool.iframeUrl}

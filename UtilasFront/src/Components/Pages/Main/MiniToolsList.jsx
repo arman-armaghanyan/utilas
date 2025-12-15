@@ -3,6 +3,14 @@ import {useEffect, useState} from 'react';
 import '../../ComponentStyles/MainLayout.css';
 import {BASE_API_URL} from '../../../config';
 
+// Helper to extract text from rich content objects or plain strings
+const getText = (field) => {
+    if (!field) return '';
+    if (typeof field === 'string') return field;
+    if (typeof field === 'object' && field.text) return field.text;
+    return '';
+};
+
 export function MiniToolsList() {
     const [tools, setTools] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -71,8 +79,8 @@ export function MiniToolsList() {
                                 aria-hidden="true"
                             />
                             <div className="mini-card__content">
-                                <h2 className="mini-card__title">{tool.title}</h2>
-                                <p className="mini-card__summary">{tool.summary}</p>
+                                <h2 className="mini-card__title">{getText(tool.title)}</h2>
+                                <p className="mini-card__summary">{getText(tool.summary)}</p>
                             </div>
                         </article>
                     </Link>
