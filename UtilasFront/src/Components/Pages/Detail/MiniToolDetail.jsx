@@ -1,6 +1,7 @@
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import '../../ComponentStyles/DetailPage.css';
+import {BASE_API_URL} from '../../../config';
 
 export function MiniToolDetail() {
     const {appId} = useParams();
@@ -19,7 +20,7 @@ export function MiniToolDetail() {
             setError(null);
 
             try {
-                const response = await fetch('http://localhost:4011/api/tools');
+                const response = await fetch(`${BASE_API_URL}/api/tools`);
 
                 if (!response.ok) {
                     throw new Error(`Request failed with status ${response.status}`);

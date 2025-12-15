@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import '../../ComponentStyles/MainLayout.css';
+import {BASE_API_URL} from '../../../config';
 
 export function MiniToolsList() {
     const [tools, setTools] = useState([]);
@@ -15,7 +16,7 @@ export function MiniToolsList() {
             setError(null);
 
             try {
-                const response = await fetch('http://localhost:4011/api/tools');
+                const response = await fetch(`${BASE_API_URL}/api/tools`);
 
                 if (!response.ok) {
                     throw new Error(`Request failed with status ${response.status}`);
