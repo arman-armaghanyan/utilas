@@ -86,6 +86,24 @@ export function MiniToolDetail() {
         return '';
     };
 
+    // Description block component for image + text with orientation
+    const DescriptionBlock = ({ block, index }) => {
+        const orientation = block.orientation || 'left';
+        return (
+            <div
+                key={index}
+                className={`description-block description-block--${orientation}`}
+            >
+                <img
+                    src={block.image}
+                    alt=""
+                    className="description-block__image"
+                />
+                <p className="description-block__text">{block.text}</p>
+            </div>
+        );
+    };
+
     return (
         <section className="detail-shell">
             <button className="detail-shell__back" type="button" onClick={() => navigate(-1)}>
@@ -103,7 +121,13 @@ export function MiniToolDetail() {
             />
             <article className="detail-shell__info">
                 <h2>About this tool</h2>
-                <p>{getText(tool.description)}</p>
+                {Array.isArray(tool.description) && tool.description.length > 0 ? (
+                    <div className="description-blocks">
+                        {tool.description.map((block, index) => (
+                            <DescriptionBlock key={index} block={block} index={index} />
+                        ))}
+                    </div>
+                ) : null}
                 <a
                     className="detail-shell__visit"
                     href={tool.iframeUrl}
