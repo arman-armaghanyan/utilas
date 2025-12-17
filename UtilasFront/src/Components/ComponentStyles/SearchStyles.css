@@ -1,0 +1,396 @@
+/* ========================================
+   Header Search Component
+   ======================================== */
+
+.header-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: var(--font-sm);
+    color: rgba(0, 0, 0, 0.6);
+    min-height: 40px;
+}
+
+.header-search:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.header-search:focus {
+    outline: none;
+    border-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.header-search--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.header-search__icon {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.header-search__text {
+    display: none;
+}
+
+@media (min-width: 640px) {
+    .header-search__text {
+        display: inline;
+    }
+}
+
+.header-search__shortcut {
+    display: none;
+    padding: 3px 6px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 5px;
+    font-size: var(--font-xs);
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+}
+
+@media (min-width: 480px) {
+    .header-search__shortcut {
+        display: inline;
+    }
+}
+
+/* ========================================
+   Global Search Modal Overlay
+   ======================================== */
+
+.global-search-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 80px 16px 20px;
+    z-index: 2000;
+    animation: overlayFadeIn 0.15s ease-out;
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   Global Search Modal
+   ======================================== */
+
+.global-search-modal {
+    width: 100%;
+    max-width: 580px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    animation: modalSlideIn 0.2s ease-out;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 120px);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.global-search-modal__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.global-search-modal__input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.global-search-modal__search-icon {
+    flex-shrink: 0;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.global-search-modal__input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: var(--font-md);
+    font-family: inherit;
+    color: #000000;
+    outline: none;
+    padding: 8px 0;
+    min-width: 0;
+}
+
+.global-search-modal__input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.global-search-modal__spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-top-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.global-search-modal__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.5);
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+
+.global-search-modal__clear:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.global-search-modal__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.global-search-modal__close kbd {
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 6px;
+    font-size: var(--font-xs);
+    font-weight: 500;
+    font-family: inherit;
+    color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: all 0.15s ease;
+}
+
+.global-search-modal__close:hover kbd {
+    background: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.7);
+}
+
+/* ========================================
+   Search Results Container
+   ======================================== */
+
+.global-search-modal__results {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 100px;
+}
+
+.global-search-modal__results-list {
+    padding: 8px;
+}
+
+/* ========================================
+   Result Item (Tool Card)
+   ======================================== */
+
+.global-search-modal__result-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: background 0.15s ease;
+}
+
+.global-search-modal__result-item:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.global-search-modal__result-item:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.global-search-modal__result-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+}
+
+.global-search-modal__result-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.global-search-modal__result-title {
+    margin: 0 0 2px;
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: #000000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.global-search-modal__result-summary {
+    margin: 0;
+    font-size: var(--font-sm);
+    color: rgba(0, 0, 0, 0.55);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.global-search-modal__result-arrow {
+    flex-shrink: 0;
+    color: rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.global-search-modal__result-item:hover .global-search-modal__result-arrow {
+    color: rgba(0, 0, 0, 0.5);
+    transform: translateX(2px);
+}
+
+/* ========================================
+   Loading State
+   ======================================== */
+
+.global-search-modal__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px 20px;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: var(--font-sm);
+}
+
+/* ========================================
+   Error State
+   ======================================== */
+
+.global-search-modal__error {
+    padding: 16px 20px;
+    margin: 8px;
+    background: rgba(220, 38, 38, 0.08);
+    border-radius: 10px;
+    color: #b91c1c;
+    font-size: var(--font-sm);
+    text-align: center;
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+
+.global-search-modal__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 32px 20px;
+    text-align: center;
+}
+
+.global-search-modal__empty-icon {
+    width: 48px;
+    height: 48px;
+    color: rgba(0, 0, 0, 0.15);
+}
+
+.global-search-modal__empty-title {
+    margin: 0;
+    font-size: var(--font-base);
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.global-search-modal__empty-text {
+    margin: 0;
+    font-size: var(--font-sm);
+    color: rgba(0, 0, 0, 0.45);
+    max-width: 280px;
+}
+
+/* ========================================
+   Hint Text
+   ======================================== */
+
+.global-search-modal__hint {
+    padding: 24px 20px;
+    font-size: var(--font-sm);
+    color: rgba(0, 0, 0, 0.45);
+    text-align: center;
+}
+
+.global-search-modal__hint kbd {
+    padding: 2px 5px;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 4px;
+    font-size: var(--font-xs);
+    font-weight: 500;
+    font-family: inherit;
+    border: none;
+}

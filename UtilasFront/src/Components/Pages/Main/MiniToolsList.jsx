@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import '../../ComponentStyles/MainLayout.css';
-import {BASE_API_URL} from '../../../config';
+import {API_URL, BASE_API_URL} from '../../../config';
 
 // Helper to extract text from rich content objects or plain strings
 const getText = (field) => {
@@ -24,7 +24,7 @@ export function MiniToolsList() {
             setError(null);
 
             try {
-                const response = await fetch(`${BASE_API_URL}/api/tools`);
+                const response = await fetch(`${BASE_API_URL}/${API_URL}`);
 
                 if (!response.ok) {
                     throw new Error(`Request failed with status ${response.status}`);
@@ -89,4 +89,3 @@ export function MiniToolsList() {
         </main>
     );
 }
-

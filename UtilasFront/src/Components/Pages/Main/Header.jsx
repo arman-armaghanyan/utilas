@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
 import {useState} from 'react';
+import {SearchComponent} from './SearchComponent';
 import '../../ComponentStyles/HeaderCss.css';
 
 export function Header() {
@@ -12,6 +13,7 @@ export function Header() {
                     Utilas
                 </Link>
             </div>
+            <SearchComponent />
             <button 
                 className="app-header__burger"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}

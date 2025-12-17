@@ -1,2 +1,2 @@
-export const BASE_API_URL = process.env.REACT_APP_BASE_API_URL || 'http://localhost:4011';
-
+export const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
+export const API_URL = 'api/tools';
