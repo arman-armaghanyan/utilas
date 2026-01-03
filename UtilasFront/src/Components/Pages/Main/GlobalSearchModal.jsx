@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useCallback, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSearch } from '../../../context/SearchContext';
 import '../../ComponentStyles/SearchStyles.css';
 
@@ -25,27 +25,25 @@ export function GlobalSearchModal() {
 
     const inputRef = useRef(null);
     const debounceRef = useRef(null);
+    const resultsListRef = useRef(null);
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    // Track selected index for keyboard navigation (-1 means nothing selected)
+    const [selectedIndex, setSelectedIndex] = useState(-1);
 
-    // Focus input when modal opens
+    // Focus input when modal opens and reset selection
     useEffect(() => {
         if (isGlobalSearchOpen && inputRef.current) {
             inputRef.current.focus();
+            setSelectedIndex(-1);
         }
     }, [isGlobalSearchOpen]);
-
-    // Handle Escape key to close modal
+    
+    // Reset selection when search results change
     useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === 'Escape' && isGlobalSearchOpen) {
-                e.preventDefault();
-                closeGlobalSearch();
-            }
-        };
-
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [isGlobalSearchOpen, closeGlobalSearch]);
+        setSelectedIndex(-1);
+    }, [searchResults]);
 
     // Prevent body scroll when modal is open
     useEffect(() => {
@@ -100,8 +98,71 @@ export function GlobalSearchModal() {
     const handleResultClick = useCallback((toolId) => {
         closeGlobalSearch();
         clearSearch();
-        navigate(`/app/${toolId}`);
-    }, [closeGlobalSearch, clearSearch, navigate]);
+        navigate(`/app/${toolId}`, { state: { from: location.pathname } });
+    }, [closeGlobalSearch, clearSearch, navigate, location.pathname]);
+
+    // Handle keyboard navigation (Escape, Arrow keys, Enter)
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!isGlobalSearchOpen) return;
+            
+            const resultsCount = searchResults?.length || 0;
+            
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
+                closeGlobalSearch();
+                return;
+            }
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (resultsCount > 0) {
+                    setSelectedIndex(prev => {
+                        const newIndex = prev < resultsCount - 1 ? prev + 1 : 0;
+                        scrollToItem(newIndex);
+                        return newIndex;
+                    });
+                }
+                return;
+            }
+            
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (resultsCount > 0) {
+                    setSelectedIndex(prev => {
+                        const newIndex = prev > 0 ? prev - 1 : resultsCount - 1;
+                        scrollToItem(newIndex);
+                        return newIndex;
+                    });
+                }
+                return;
+            }
+            
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (resultsCount > 0) {
+                    // If something is selected, navigate to it; otherwise navigate to first result
+                    const indexToNavigate = selectedIndex >= 0 ? selectedIndex : 0;
+                    handleResultClick(searchResults[indexToNavigate].id);
+                }
+                return;
+            }
+        };
+        
+        // Helper to scroll selected item into view
+        const scrollToItem = (index) => {
+            if (resultsListRef.current) {
+                const items = resultsListRef.current.querySelectorAll('.global-search-modal__result-item');
+                if (items[index]) {
+                    items[index].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isGlobalSearchOpen, closeGlobalSearch, searchResults, selectedIndex, handleResultClick]);
 
     if (!isGlobalSearchOpen) {
         return null;
@@ -192,12 +253,13 @@ export function GlobalSearchModal() {
                     )}
 
                     {hasResults && (
-                        <div className="global-search-modal__results-list">
-                            {searchResults.map((tool) => (
+                        <div className="global-search-modal__results-list" ref={resultsListRef}>
+                            {searchResults.map((tool, index) => (
                                 <button
                                     key={tool.id}
-                                    className="global-search-modal__result-item"
+                                    className={`global-search-modal__result-item ${index === selectedIndex ? 'global-search-modal__result-item--selected' : ''}`}
                                     onClick={() => handleResultClick(tool.id)}
+                                    onMouseEnter={() => setSelectedIndex(index)}
                                 >
                                     <div 
                                         className="global-search-modal__result-thumb"
@@ -254,7 +316,7 @@ export function GlobalSearchModal() {
 
                     {showHint && (
                         <div className="global-search-modal__hint">
-                            Type to search for tools or press <kbd>ESC</kbd> to close
+                            Type to search for tools. Use <kbd>↑</kbd> <kbd>↓</kbd> to navigate, <kbd>Enter</kbd> to select, <kbd>ESC</kbd> to close
                         </div>
                     )}
                 </div>

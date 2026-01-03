@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import '../../ComponentStyles/MainLayout.css';
 import {API_URL, BASE_API_URL} from '../../../config';
@@ -12,6 +12,7 @@ const getText = (field) => {
 };
 
 export function MiniToolsList() {
+    const location = useLocation();
     const [tools, setTools] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -71,18 +72,18 @@ export function MiniToolsList() {
 
             <section className="mini-grid">
                 {tools.map((tool) => (
-                    <Link key={tool.id} to={`/app/${tool.id}`} className="mini-card">
-                        <article className="mini-card__body">
+                    <Link key={tool.id} to={`/app/${tool.id}`} state={{ from: location.pathname }} className="mini-card">
+                        <div className="mini-card__visual">
                             <div
                                 className="mini-card__thumb"
                                 style={{backgroundImage: `url(${tool.thumbnail})`}}
                                 aria-hidden="true"
                             />
-                            <div className="mini-card__content">
-                                <h2 className="mini-card__title">{getText(tool.title)}</h2>
-                                <p className="mini-card__summary">{getText(tool.summary)}</p>
-                            </div>
-                        </article>
+                        </div>
+                        <div className="mini-card__content">
+                            <h2 className="mini-card__title">{getText(tool.title)}</h2>
+                            <p className="mini-card__summary">{getText(tool.summary)}</p>
+                        </div>
                     </Link>
                 ))}
             </section>

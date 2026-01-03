@@ -1,21 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
     color-scheme: light;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    color: #0f172a;
     
-    /* Type Scale - Major Third (1.25 ratio) */
+    /* ========================================
+       Typography - Rethink Sans
+       ======================================== */
+    --font-family: "Rethink Sans", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    
+    /* Type Scale - Major Third (1.250 ratio) */
     --font-xs: 0.64rem;      /* 10.24px */
     --font-sm: 0.8rem;       /* 12.8px */
     --font-base: 1rem;       /* 16px */
     --font-md: 1.25rem;      /* 20px */
-    --font-lg: 1.563rem;      /* 25px */
-    --font-xl: 1.953rem;      /* 31.25px */
+    --font-lg: 1.563rem;     /* 25px */
+    --font-xl: 1.953rem;     /* 31.25px */
     --font-2xl: 2.441rem;    /* 39px */
     --font-3xl: 3.052rem;    /* 48.8px */
     --font-4xl: 3.815rem;    /* 61px */
     --font-5xl: 4.768rem;    /* 76.3px */
+    
+    /* ========================================
+       Color Palette
+       ======================================== */
+    --color-bg-primary: #FFFFFF;
+    --color-bg-secondary: #F5F4F2;
+    --color-bg-tertiary: #EDECEA;
+    --color-border: #E8E7E5;
+    --color-text-primary: #242424;
+    --color-text-secondary: rgba(36, 36, 36, 0.65);
+    --color-text-tertiary: rgba(36, 36, 36, 0.5);
+    --color-text-muted: rgba(36, 36, 36, 0.4);
+    
+    /* Semantic Colors */
+    --color-accent: #242424;
+    --color-accent-hover: rgba(36, 36, 36, 0.85);
+    
+    /* ========================================
+       Spacing System
+       ======================================== */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-xl: 48px;
+    --spacing-2xl: 64px;
+    --spacing-3xl: 80px;
+    
+    /* Section padding (responsive) */
+    --section-padding-x: clamp(16px, 5vw, 80px);
+    --section-padding-y: clamp(48px, 8vh, 80px);
+    
+    /* Content max-widths */
+    --content-max-width: 1200px;
+    --content-narrow: 900px;
+    
+    /* Section gaps */
+    --section-gap: clamp(48px, 6vw, 64px);
 }
 
 * {
@@ -24,9 +65,10 @@
 
 body {
     margin: 0;
-    background: #ffffff;
+    background: var(--color-bg-primary);
     min-height: 100vh;
-    color: #0b1220;
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
 }
 
 a {
@@ -38,19 +80,28 @@ a {
     position: fixed;
     top: 16px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(0);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 12px 20px;
-    background-color: #edededb8;
+    background-color: rgba(237, 236, 234, 0.72);
     backdrop-filter: blur(24px);
-    color: #000000;
+    color: var(--color-text-primary);
     border-radius: 999px;
     z-index: 1000;
     width: auto;
     max-width: calc(100% - 32px);
     gap: 20px;
+    opacity: 1;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+/* Hidden state for detail page */
+.app-header--hidden {
+    transform: translateX(-50%) translateY(-150%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 @media (min-width: 480px) {
@@ -96,7 +147,7 @@ a {
     letter-spacing: -0.01em;
     display: inline-flex;
     align-items: center;
-    color: #000000;
+    color: var(--color-text-primary);
     min-height: 44px;
     min-width: 44px;
     justify-content: center;
@@ -134,7 +185,7 @@ a {
     display: block;
     width: 24px;
     height: 2px;
-    background-color: #000000;
+    background-color: var(--color-text-primary);
     transition: all 0.3s ease;
     border-radius: 2px;
 }
@@ -148,7 +199,8 @@ a {
 .app-header__nav-link {
     font-size: var(--font-base);
     font-weight: 500;
-    color: #000000;
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
     transition: color 0.2s ease;
     min-height: 44px;
     display: inline-flex;
@@ -157,16 +209,38 @@ a {
 }
 
 .app-header__nav-link:hover {
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--color-text-secondary);
+}
+
+.app-header__nav-link--search {
+    gap: 8px;
+}
+
+.app-header__hotkey {
+    padding: 3px 6px;
+    background: var(--color-bg-tertiary);
+    border-radius: 5px;
+    font-size: var(--font-xs);
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--color-text-tertiary);
+    border: 1px solid var(--color-border);
+}
+
+@media (max-width: 1023px) {
+    .app-header__hotkey {
+        display: none;
+    }
 }
 
 .app-header__cta {
     padding: 10px 18px;
     border-radius: 999px;
-    background: #000000;
-    color: #ffffff;
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
     font-weight: 600;
-    font-size: var(--font-sm);
+    font-size: var(--font-base);
+    font-family: var(--font-family);
     transition: background 0.2s ease;
     min-height: 44px;
     min-width: 44px;
@@ -176,54 +250,154 @@ a {
 }
 
 .app-header__cta:hover {
-    background: rgba(0, 0, 0, 0.8);
+    background: var(--color-accent-hover);
+}
+
+/* Mobile menu backdrop overlay */
+.app-header__backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(36, 36, 36, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Close button hidden by default */
+.app-header__close {
+    display: none;
 }
 
 @media (max-width: 1023px) {
     .app-header__burger {
         display: flex;
+        z-index: 10000;
     }
 
+    /* Full-screen menu overlay */
     .app-header__nav {
-        position: absolute;
-        top: calc(100% + 10px);
-        left: 0;
-        right: 0;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        /* Center relative to viewport despite parent transform */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
         flex-direction: column;
-        align-items: flex-start;
-        background-color: #edededb8;
-        backdrop-filter: blur(24px);
-        border-radius: 16px;
-        padding: 12px;
-        gap: 4px;
+        align-items: center;
+        justify-content: center;
+        background: #FFFFFF;
+        padding: var(--spacing-xl);
+        padding-top: calc(var(--spacing-xl) + env(safe-area-inset-top, 0px));
+        padding-bottom: calc(var(--spacing-xl) + env(safe-area-inset-bottom, 0px));
+        gap: var(--spacing-sm);
         opacity: 0;
         visibility: hidden;
-        transform: translateY(-10px);
-        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                    visibility 0.4s ease;
+        z-index: 9999;
+        pointer-events: none;
     }
 
     .app-header__nav--open {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        pointer-events: auto;
     }
 
+    /* Close button - fixed position top right */
+    .app-header__close {
+        display: flex;
+        position: fixed;
+        top: calc(var(--spacing-md) + env(safe-area-inset-top, 0px));
+        right: var(--section-padding-x);
+        width: 48px;
+        height: 48px;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-bg-secondary);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        color: var(--color-text-primary);
+        transition: background 0.2s ease, transform 0.2s ease;
+        z-index: 10001;
+    }
+
+    .app-header__close:hover {
+        background: var(--color-bg-tertiary);
+        transform: scale(1.05);
+    }
+
+    .app-header__close:active {
+        transform: scale(0.95);
+    }
+
+    /* Navigation links - large centered links */
     .app-header__nav-link {
-        width: 100%;
-        padding: 12px 16px;
-        min-height: 44px;
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: var(--font-2xl);
+        font-weight: 600;
+        text-align: center;
+        justify-content: center;
+        border-radius: 16px;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        color: var(--color-text-primary);
     }
 
-    .app-header--menu-open .app-header__burger span:nth-child(1) {
-        transform: rotate(45deg) translate(6px, 6px);
+    .app-header__nav-link:hover {
+        opacity: 0.6;
+        background: none;
     }
 
-    .app-header--menu-open .app-header__burger span:nth-child(2) {
+    .app-header__nav-link:active {
+        transform: scale(0.98);
+    }
+
+    /* Staggered animation for menu items */
+    .app-header__nav--open .app-header__nav-link {
+        animation: appMenuItemFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .app-header__nav--open .app-header__nav-link:nth-child(2) {
+        animation-delay: 0.05s;
+    }
+
+    .app-header__nav--open .app-header__nav-link:nth-child(3) {
+        animation-delay: 0.1s;
+    }
+
+    .app-header__nav--open .app-header__nav-link:nth-child(4) {
+        animation-delay: 0.15s;
+    }
+
+    @keyframes appMenuItemFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Hide burger when menu is open */
+    .app-header--menu-open .app-header__burger {
         opacity: 0;
+        pointer-events: none;
     }
 
-    .app-header--menu-open .app-header__burger span:nth-child(3) {
-        transform: rotate(-45deg) translate(6px, -6px);
+    /* Hide backdrop - not needed for full screen */
+    .app-header__backdrop {
+        display: none;
     }
 }
-

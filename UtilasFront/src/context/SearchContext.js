@@ -15,7 +15,7 @@ export function SearchProvider({ children }) {
 
     const openGlobalSearch = useCallback(() => {
         setIsGlobalSearchOpen(true);
-    }, []);
+    }, []);  
 
     const closeGlobalSearch = useCallback(() => {
         setIsGlobalSearchOpen(false);
@@ -100,6 +100,7 @@ export function SearchProvider({ children }) {
 }
 
 export function useSearch() {
+    console.log(BASE_API_URL);
     const context = useContext(SearchContext);
     if (!context) {
         throw new Error('useSearch must be used within a SearchProvider');
